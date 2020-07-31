@@ -1,10 +1,14 @@
 # gfx
-Project for using a simple C graphics library
+Project for using a simple C graphics library on a Linux machine (Raspberry Pi in my case).
 
 To compile:
 ```
 gcc example.c gfx.c -o example -lX11 -lm
+```
 
+To run:
+```
+./example
 ```
 
 # Links to orginal resource
