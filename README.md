@@ -1,6 +1,11 @@
 # gfx
 Project for using a simple C graphics library on a Linux machine (Raspberry Pi in my case).
 
+To install x11:
+```
+sudo apt install libx11-dev
+```
+
 To compile:
 ```
 gcc example.c gfx.c -o example -lX11 -lm
