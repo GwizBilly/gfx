@@ -10,7 +10,7 @@ To compile:
 ```
 gcc example.c gfx.c -o example -lX11 -lm
 ```
-Note that the 'X' in the -X11 is capitalized.
+Note that the 'X' in the -lX11 is capitalized.
 
 To run:
 ```
