@@ -6,22 +6,22 @@
 	Modified and expanded by Mr. Savoie 16/Sept/2020
 */
 #include <stdio.h>
+#include <stdlib.h>
 #include "gfx.h"
 void mySetup();
 void makeStuff(int d, int b, int r);
 void gridder(int d, int b, int r);
 void middleBox(int d, int b, int r);
-void design(int d, int b, int r);
 char sizeDecide(char n);
 #define Gsize 2 
-#define ysize 240 * Gsize
-#define xsize 240 * Gsize
+#define ysize 239 * Gsize
+#define xsize 239 * Gsize
 //default dimensions
 #define dim 3 
 #define buff 4 * Gsize
 #define res 77 * Gsize
 
-int	d, b, r; // resolution, dimensions, border
+int	d, b, r; // dimensions, border, resolution
 
 int main()
 {
@@ -44,27 +44,9 @@ int main()
 void makeStuff(int d, int b, int r) {
 
 	gfx_clear();
-	//gridder(d, b, r);
-	//middleBox(d, b, r);
-	design(d, b, r);
+	gridder(d, b, r);
+	middleBox(d, b, r);
 	gfx_flush();
-
-}
-
-void design(int d, int b, int r) {
-
-	//gfx_color(0, 0, 0);
-	for (int i = 0; i < d; i++) {
-		for (int j = 0; j < d; j++) {
-			for (int k = 1; k <= 3; k++) {
-				for (int l = 1; l <= 3; l++) {
-					gfx_line((i * r + b) * k, (j * r + b) * l, i * k, j * l);
-					//gfx_point(i * r + b + k * (k++)/16, j * r + b + l);
-				}
-			}
-		}
-	} 
-	gfx_color(0, 200, 100);
 
 }
 
@@ -72,9 +54,12 @@ void middleBox(int d, int b, int r) {
 
 	for (int i = 0; i < d; i++) {
 		for (int j = 0; j < d; j++) {
-			for (int k = 1; k < r-1; k++) {
-				for (int l = 1; l < r-1; l++) {
-					gfx_point(i * r + b + k, j * r + b + l);
+			for (int k = 1 + b; k < r - 1; k++) {
+				for (int l = 1 + b;l < r - 1; l++) {
+						int yesNo;
+						if ((yesNo = rand() % 2) == 1) {
+							gfx_point(i * r + b + k, j * r + b + l);
+						};
 					//gfx_point(i * r + b + k * (k++)/16, j * r + b + l);
 				}
 			}
