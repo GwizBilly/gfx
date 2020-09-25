@@ -7,7 +7,7 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
-#include "gfx.h"
+#include "./lib/gfx.h"
 void mySetup();
 void makeStuff(int d, int b, int r);
 void middleBox(int d, int b, int r);

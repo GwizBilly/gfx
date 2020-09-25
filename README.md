@@ -8,7 +8,7 @@ sudo apt install libx11-dev
 
 To compile:
 ```
-gcc example.c gfx.c -o example -lX11 -lm
+gcc example.c ./lib/gfx.c -o example -lX11 -lm
 ```
 Note that the 'X' in the -lX11 is capitalized.
 
