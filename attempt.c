@@ -3,7 +3,7 @@
 	CSE 20211
 	9/7/2011
 	by Prof. Thain
-	Modified and expanded by Mr. Savoie 16/Sept/2020
+	Modified and expanded by Mr. Savoie Oct/2020
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,7 +12,6 @@
 void mySetup();
 void makeStuff(int d, int b, int r);
 
-char sizeDecide(char n);
 #define Gsize 1 
 #define ysize 300 
 #define xsize 300
@@ -21,7 +20,7 @@ char sizeDecide(char n);
 #define buff 0
 #define res 27 
 
-static char testTile[27][27] = {
+static int testTile[27][27] = {
 	{	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	},
 	{	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	},
 	{	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,	1,	1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	},
@@ -69,9 +68,6 @@ void mySetup() {
 	gfx_open(xsize, ysize, "Example Graphics Program");
 	gfx_color(0, 200, 100);
 	makeStuff(dim, buff, res);
-	gfx_color(200, 0, 0);
-	gfx_line(28,28,28,297-28);
-	gfx_line(28,28,297-28,28);
 
 }
 
@@ -89,6 +85,11 @@ void makeStuff(int d, int b, int r) {
 			}
 		}
 	}	
+	gfx_color(200, 0, 0);
+	gfx_line(28, 28, 28, 297 - 28);
+	gfx_line(28, 28, 297 - 28, 28);
+	gfx_line(297 - 28, 28, 297 - 28, 297 - 28);
+	gfx_line(297 - 28, 297 - 28, 28, 297 - 28);
 	gfx_flush();
 
 }
