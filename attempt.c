@@ -13,20 +13,17 @@
 
 void mySetup();
 void makeStuff(int d, int b, int r);
+void morphTile();
 int getTilePixel(int map, int k, int l);
 int fetchTile(int mapNum, int index);
 int getMouseTile(int c);
-void morphTile();
-int tile;
 
-#define Gsize 1 
-#define ysize 300 
-#define xsize 300
+#define ysize 297 
+#define xsize 298 
 //default dimensions
 #define dim 11 
 #define buff 0
 #define res 27 
-
 
 int main()
 {
@@ -76,7 +73,7 @@ void makeStuff(int d, int b, int r) {
 
 	gfx_clear();
 	int masterCount = 0;
-	int kolor;
+	int kolor, tile;
 	for (int i = 0; i < d; i++) {
 		for (int j = 0; j < d; j++) {
 			tile = fetchTile(1, masterCount);
@@ -145,3 +142,4 @@ int getMouseTile(int c) {
 	return 0;
 
 }
+
