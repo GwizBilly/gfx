@@ -10,24 +10,20 @@
 #include "./lib/gfx.h"
 #include "./lib/tiles.c"
 #include "./lib/gm.c"
-
 void mySetup();
 void makeStuff(int d, int b, int r);
-void morphTile();
+void morphTile(char nextTile);
 int getTilePixel(int map, int k, int l);
 int fetchTile(int mapNum, int index);
 int getMouseTile(int c);
-
 #define ysize 297 
-#define xsize 298 
-//default dimensions
+#define xsize 297 
 #define dim 11 
 #define buff 0
 #define res 27 
-
+#define defaultNextTile 0
 int main()
 {
-
   mySetup();
   char c, t;
   while (1) { // Wait for the user to press a character, to set size.
@@ -35,29 +31,19 @@ int main()
     t = getMouseTile(c);  
     if (c == 'q') break; // Quit if it is the letter q.
     if (t == 1) {
-      gfx_color(100, 250, 10);
-      gfx_line(10, 10, 100, 100);
-      gfx_flush();
-      morphTile();
+      morphTile('2');
     }
   }
   return 0;
-
 }
-
 void mySetup() {
-
   gfx_open(xsize, ysize, "Example Graphics Program");
   gfx_color(0, 200, 100);
   makeStuff(dim, buff, res);
-
 }
-
-void morphTile() {
-
-  //gfx_clear();
+void morphTile(char nextTile) {
   int kolor, tile;
-  tile = '4';
+  tile = nextTile;
   for (int k = 0; k < res; k++) {
     for (int l = 0; l < res; l++) {
       kolor = getTilePixel(tile, k, l);
@@ -66,11 +52,8 @@ void morphTile() {
     }
   }
   gfx_flush();
-
 }
-
 void makeStuff(int d, int b, int r) {
-
   gfx_clear();
   int masterCount = 0;
   int kolor, tile;
@@ -93,19 +76,13 @@ void makeStuff(int d, int b, int r) {
   gfx_line(297 - 28, 28, 297 - 28, 297 - 28);
   gfx_line(297 - 28, 297 - 28, 28, 297 - 28);
   gfx_flush();
-
 }
-
 int fetchTile(int mapNum, int index) {
-
   int x;
   x = gm[index][mapNum];
   return x; 
-
 }
-
 int getTilePixel(int tile, int k, int l) {
-
   if (tile == '1') {
     return 0;
   } else {
@@ -128,10 +105,8 @@ int getTilePixel(int tile, int k, int l) {
     }
     return x;
   }
-
 }
 int getMouseTile(int c) {
-
   if (c == 1) {
     int x = gfx_ypos();
     int y = gfx_xpos();
@@ -140,6 +115,5 @@ int getMouseTile(int c) {
     }
   }
   return 0;
-
 }
 
