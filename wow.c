@@ -16,6 +16,7 @@ void morphTile(char nextTile, int row, int col);
 int getTilePixel(int map, int k, int l);
 int fetchTile(int mapNum, int index);
 int getMouseTile(int c);
+void incrementTile();
 #define ysize 297 
 #define xsize 297 
 #define dim 11 
@@ -23,6 +24,7 @@ int getMouseTile(int c);
 #define res 27 
 #define defaultNextTile 0
 int R,C;
+char T = '2';
 int main()
 {
   mySetup();
@@ -31,10 +33,42 @@ int main()
     c = gfx_wait();
     if (c == 'q') break; // Quit if it is the letter q.
     if (t = getMouseTile(c) > 0) {
-      morphTile('3', R, C);
+      incrementTile();
+      morphTile(T, R, C);
     }
   }
   return 0;
+}
+void incrementTile() {
+  if (T == '2') {
+    T = '3';
+  } else if (T == '3') {
+    T = '4';
+  } else if (T == '4') {
+    T = '5';
+  } else if (T == '5') {
+    T = '6';
+  } else if (T == '6') {
+    T = '7';
+  } else if (T == '7') {
+    T = '8';
+  } else if (T == '8') {
+    T = '9';
+  } else if (T == '9') {
+    T = 'A';
+  } else if (T == 'A') {
+    T = 'B';
+  } else if (T == 'B') {
+    T = 'C';
+  } else if (T == 'C') {
+    T = 'D';
+  } else if (T == 'D') {
+    T = 'E';
+  } else if (T == 'E') {
+    T = '1';
+  } else if (T == '1') {
+    T = '2';
+  }
 }
 void mySetup() {
   gfx_open(xsize, ysize, "Example Graphics Program");
