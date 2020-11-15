@@ -17,8 +17,9 @@ int getTilePixel(int map, int k, int l);
 int fetchTile(int mapNum, int index);
 int getMouseTile(int c);
 void incrementTile();
+void tileChooserGUI();
 #define ysize 297 
-#define xsize 297 
+#define xsize 297 + 27 + 27 + 27 
 #define dim 11 
 #define buff 0
 #define res 27 
@@ -74,6 +75,8 @@ void mySetup() {
   gfx_open(xsize, ysize, "Example Graphics Program");
   gfx_color(0, 200, 100);
   makeStuff(dim, buff, res);
+  tileChooserGUI();
+  gfx_flush();
 }
 void morphTile(char nextTile, int row, int col) {
   int kolor, tile;
@@ -111,6 +114,14 @@ void makeStuff(int d, int b, int r) {
   gfx_line(297 - 28, 297 - 28, 28, 297 - 28);
   gfx_flush();
 }
+void tileChooserGUI() {
+  morphTile('E', 1, 12);
+  morphTile('0', 3, 12);
+  morphTile('2', 5, 12);
+  morphTile('6', 2, 13);
+  morphTile('8', 4, 13);
+  morphTile('B', 6, 13);
+}
 int fetchTile(int mapNum, int index) {
   int x;
   x = gm[index][mapNum];
@@ -122,6 +133,7 @@ int getTilePixel(int tile, int k, int l) {
   } else {
     int x;
     switch (tile) {
+      case '0': x = dot[k][l]; break; 
       case '2': x = tl[k][l]; break;
       case '3': x = tr[k][l]; break;
       case '4': x = bl[k][l]; break;
