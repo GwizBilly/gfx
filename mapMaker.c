@@ -1,10 +1,3 @@
-/*
-  A simple example of using the gfx library.
-  CSE 20211
-  9/7/2011
-  by Prof. Thain
-  Modified and expanded by Mr. Savoie Oct/2020-Nov2020
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include "./lib/gfx.h"
