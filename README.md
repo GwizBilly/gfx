@@ -33,9 +33,10 @@ This simple graphics library was written by Douglas Thain and is licensed under 
 
 I have added mouse pointer events that don't require a button press or key press.
 The original library was designed so that:
+
 "gfx_xpos() and gfx_ypos return the X and Y coordinates, respectively, of the mouse pointer when the last key or button was pressed."
 
-I added a MotionNotify event in the gfx_event_waiting() function, by adding "PointerMotionMask" to the masks parameter of the XSelectInput() function:
+I added a MotionNotify event in the gfx_event_waiting() function of gfx.c library, by adding "PointerMotionMask" to the masks parameter of the XSelectInput() function:
 ```
 XSelectInput(gfx_display, gfx_window, StructureNotifyMask|KeyPressMask|ButtonPressMask|PointerMotionMask);
 ```
