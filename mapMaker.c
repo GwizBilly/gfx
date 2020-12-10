@@ -35,12 +35,14 @@ int main()
   mySetup();
   char c, t;
   while (1) { // Wait for the user to press a character.
-    c = gfx_wait();
-    if (c == 'q') break; // Quit if it is the letter q.
-    if (t = getMouseTile(c) > 0) {
-      incrementTile();
-      morphTile(T, R, C);
-    }
+    if (c = gfx_event_waiting()) { 
+      c = gfx_wait();
+      if (c == 'q') break; // Quit if it is the letter q.
+      if (t = getMouseTile(c) > 0) {
+        incrementTile();
+        morphTile(T, R, C);
+      }
+    } 
     gfx_color(0, 255, 0);
     mx = gfx_xpos();
     my = gfx_ypos();
