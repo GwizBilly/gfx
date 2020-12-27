@@ -1,3 +1,8 @@
+/* the current objective: implement a cursor as feedback to the user. 
+   Ideally as a blinking circle around the current selection. 
+   This would require a buffer that knows all the pixels, and a way to
+   center the mouse on the closest tile, and have stored the pixels of the
+   screen, so that we can restore the display when the cursor shifts. */
 #include <stdio.h>
 #include <stdlib.h>
 #include "./lib/gfx.h"
@@ -9,19 +14,18 @@ void morphTile(char nextTile, int row, int col);
 int getTilePixel(int map, int k, int l);
 int fetchTile(int mapNum, int index);
 int getMouseTile(int c);
-void incrementTile();
+void incrementTile(int i);
 void tileChooserGUI();
+void cursorShift();
 #define ysize 297 
 #define xsize 297 + 27 + 27 + 27 
 #define dim 11 
 #define buff 0
 #define res 27 
 #define defaultNextTile 0
-int R,C, mx, my;
+int R, C, mx, my;
+char myBuff[10][10];
 char T = '2';
-/* idea for implementing mouse cursor.
-  Need a "second canvas" that goes through all the pixels and sets 
-  them to the first canvas' pixels unless within the mouse area.*/
 
 int main()
 {
@@ -32,14 +36,17 @@ int main()
       c = gfx_wait();
       if (c == 'q') break; // Quit if it is the letter q.
       if (t = getMouseTile(c) > 0) {
-        incrementTile();
+        incrementTile(0);
         morphTile(T, R, C);
       }
     } 
+    t = getMouseTile(1);
+    //morphTile(T, R, C);
     gfx_color(0, 255, 0);
     mx = gfx_xpos();
     my = gfx_ypos();
-    gfx_point(mx, my);
+    cursorShift();
+    //gfx_point(mx, my);
     gfx_flush();
   }
   return 0;
@@ -50,6 +57,11 @@ void mySetup() {
   makeStuff(dim, buff, res);
   tileChooserGUI();
   gfx_flush();
+  for (int i = 0; i < 10; i++) {
+    for (int j = 0; j < 10; j++) {
+      myBuff[i][j] = '0';
+    }
+  }
 }
 int getMouseTile(int c) {
   if (c == 1) { // one is mouse left-click
@@ -192,7 +204,7 @@ int getMouseTile(int c) {
   }
   return 0;
 }
-void incrementTile() {
+void incrementTile(int i) {
   if (T == '2') {
     T = '3';
   } else if (T == '3') {
@@ -245,7 +257,7 @@ void makeStuff(int d, int b, int r) {
       masterCount++;
       for (int k = 0; k < r; k++) {
         for (int l = 0; l < r; l++) {
-          kolor = getTilePixel(tile, k, l);
+          myBuff[i][j] = kolor = getTilePixel(tile, k, l);
           gfx_color(0, kolor * 200, kolor * 100);
           gfx_point(j * r + l + b, i * r + k + b);
         }
@@ -296,4 +308,13 @@ int getTilePixel(int tile, int k, int l) {
     }
     return x;
   }
+}
+int myLastTile = 0;
+void cursorShift() {
+  int myTileNow = getMouseTile(1);
+  if (myTileNow != myLastTile) {
+    makeStuff(dim, buff, res);
+    gfx_line(C*res,R*res,C*res+res,R*res);
+  }
+  myLastTile = myTileNow; 
 }
