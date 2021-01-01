@@ -36,17 +36,16 @@ int main()
       c = gfx_wait();
       if (c == 'q') break; // Quit if it is the letter q.
       if (t = getMouseTile(c) > 0) {
-        incrementTile(0);
-        morphTile(T, R, C);
+        if (t == 1) {
+          incrementTile(0);
+          morphTile(T, R, C);
+        }
       }
     } 
-    t = getMouseTile(1);
-    //morphTile(T, R, C);
     gfx_color(0, 255, 0);
     mx = gfx_xpos();
     my = gfx_ypos();
     cursorShift();
-    //gfx_point(mx, my);
     gfx_flush();
   }
   return 0;
@@ -265,10 +264,10 @@ void makeStuff(int d, int b, int r) {
     }
   }  
   gfx_color(200, 0, 0);
-  gfx_line(28, 28, 28, 297 - 28);
-  gfx_line(28, 28, 297 - 28, 28);
-  gfx_line(297 - 28, 28, 297 - 28, 297 - 28);
-  gfx_line(297 - 28, 297 - 28, 28, 297 - 28);
+  gfx_line(25, 25, 25, 298 - 27);
+  gfx_line(26, 25, 298 - 27, 25);
+  gfx_line(298 - 27, 26, 298 - 27, 298 - 27);
+  gfx_line(298 - 27, 298 - 27, 26, 298 - 27);
   gfx_flush();
 }
 void tileChooserGUI() {
@@ -314,7 +313,11 @@ void cursorShift() {
   int myTileNow = getMouseTile(1);
   if (myTileNow != myLastTile) {
     makeStuff(dim, buff, res);
-    gfx_line(C*res,R*res,C*res+res,R*res);
+    gfx_color(0,0,200);
+    gfx_line(C*res-1,R*res-1,C*res+res-1,R*res-1);
+    gfx_line(C*res-1,R*res-1,C*res-1,R*res+res-1);
+    gfx_line(C*res+res,R*res+res-1,C*res+res,R*res-1);
+    gfx_line(C*res+res,R*res+res,C*res-1,R*res+res);
   }
   myLastTile = myTileNow; 
 }
