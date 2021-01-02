@@ -15,7 +15,6 @@ int getTilePixel(int map, int k, int l);
 int fetchTile(int mapNum, int index);
 int getMouseTile(int c);
 void incrementTile(int i);
-void tileChooserGUI();
 void cursorShift();
 #define ysize 297 
 #define xsize 297 + 27 + 27 + 27 
@@ -35,11 +34,10 @@ int main()
     if (c = gfx_event_waiting()) { 
       c = gfx_wait();
       if (c == 'q') break; // Quit if it is the letter q.
-      if (t = getMouseTile(c) > 0) {
-        if (t == 1) {
-          incrementTile(0);
-          morphTile(T, R, C);
-        }
+      if (c == 1) {
+        getMouseTile(c);
+        incrementTile(0);
+        morphTile(T, R, C);
       }
     } 
     gfx_color(0, 255, 0);
@@ -50,23 +48,26 @@ int main()
   }
   return 0;
 }
-void mySetup() {
+void mySetup()
+{
   gfx_open(xsize, ysize, "Example Graphics Program");
   gfx_color(0, 200, 100);
   makeStuff(dim, buff, res);
-  tileChooserGUI();
   gfx_flush();
   for (int i = 0; i < 10; i++) {
     for (int j = 0; j < 10; j++) {
       myBuff[i][j] = '0';
     }
   }
+  morphTile(T, 2, 12);
 }
-int getMouseTile(int c) {
+int getMouseTile(int c) 
+{
   if (c == 1) { // one is mouse left-click
     int x = gfx_xpos();
     int y = gfx_ypos();
     int r = 0;
+
     if (x < res * 1  && y < res * 1 && x > res * 0  && y > res * 0) { r = 1; C = 0; R = 0;}
     if (x < res * 2  && y < res * 1 && x > res * 1  && y > res * 0) { r = 2; C = 1; R = 0;}
     if (x < res * 3  && y < res * 1 && x > res * 2  && y > res * 0) { r = 3; C = 2; R = 0;}
@@ -199,11 +200,13 @@ int getMouseTile(int c) {
     if (x < res * 10 && y < res * 11&& x > res * 9  && y > res * 10) { r = 119;C = 9; R = 10;}
     if (x < res * 11 && y < res * 11&& x > res * 10 && y > res * 10) { r = 120;C = 10; R = 10;}
 
+    if (x < res * 13  && y < res * 3 && x > res * 12  && y > res * 2) { r = 1; C = 12; R = 2;}
     return r;
   }
   return 0;
 }
-void incrementTile(int i) {
+void incrementTile(int i)
+{
   if (T == '2') {
     T = '3';
   } else if (T == '3') {
@@ -234,7 +237,8 @@ void incrementTile(int i) {
     T = '2';
   }
 }
-void morphTile(char nextTile, int row, int col) {
+void morphTile(char nextTile, int row, int col) 
+{
   int kolor, tile;
   tile = nextTile;
   for (int k = 0; k < res; k++) {
@@ -244,9 +248,9 @@ void morphTile(char nextTile, int row, int col) {
       gfx_point(col * res + l + buff, row * res + k + buff);
     }
   }
-  gfx_flush();
 }
-void makeStuff(int d, int b, int r) {
+void makeStuff(int d, int b, int r) 
+{
   gfx_clear();
   int masterCount = 0;
   int kolor, tile;
@@ -270,20 +274,14 @@ void makeStuff(int d, int b, int r) {
   gfx_line(298 - 27, 298 - 27, 26, 298 - 27);
   gfx_flush();
 }
-void tileChooserGUI() {
-  morphTile('E', 1, 12);
-  morphTile('0', 3, 12);
-  morphTile('2', 5, 12);
-  morphTile('6', 2, 13);
-  morphTile('8', 4, 13);
-  morphTile('B', 6, 13);
-}
-int fetchTile(int mapNum, int index) {
+int fetchTile(int mapNum, int index) 
+{
   int x;
   x = gm[index][mapNum];
   return x; 
 }
-int getTilePixel(int tile, int k, int l) {
+int getTilePixel(int tile, int k, int l) 
+{
   if (tile == '1') {
     return 0;
   } else {
@@ -309,7 +307,8 @@ int getTilePixel(int tile, int k, int l) {
   }
 }
 int myLastTile = 0;
-void cursorShift() {
+void cursorShift() 
+{
   int myTileNow = getMouseTile(1);
   if (myTileNow != myLastTile) {
     makeStuff(dim, buff, res);
@@ -318,6 +317,7 @@ void cursorShift() {
     gfx_line(C*res-1,R*res-1,C*res-1,R*res+res-1);
     gfx_line(C*res+res,R*res+res-1,C*res+res,R*res-1);
     gfx_line(C*res+res,R*res+res,C*res-1,R*res+res);
+    morphTile(T, 2, 12);
   }
   myLastTile = myTileNow; 
 }
