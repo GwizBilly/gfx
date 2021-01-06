@@ -1,8 +1,3 @@
-/* the current objective: implement a cursor as feedback to the user. 
-   Ideally as a blinking circle around the current selection. 
-   This would require a buffer that knows all the pixels, and a way to
-   center the mouse on the closest tile, and have stored the pixels of the
-   screen, so that we can restore the display when the cursor shifts. */
 #include <stdio.h>
 #include <stdlib.h>
 #include "./lib/gfx.h"
@@ -23,7 +18,6 @@ void cursorShift();
 #define res 27 
 #define defaultNextTile 0
 int R, C, mx, my;
-char myBuff[10][10];
 char T = '2';
 
 int main()
@@ -32,17 +26,17 @@ int main()
   char c, t;
   while (1) { // Wait for the user to press a character.
     if (c = gfx_event_waiting()) { 
+      mx = gfx_xpos();
+      my = gfx_ypos();
       c = gfx_wait();
-      if (c == 'q') break; // Quit if it is the letter q.
       if (c == 1) {
         getMouseTile(c);
         incrementTile(0);
         morphTile(T, R, C);
       }
+      if (c == 'q') break; // Quit if it is the letter q.
     } 
     gfx_color(0, 255, 0);
-    mx = gfx_xpos();
-    my = gfx_ypos();
     cursorShift();
     gfx_flush();
   }
@@ -53,13 +47,7 @@ void mySetup()
   gfx_open(xsize, ysize, "Example Graphics Program");
   gfx_color(0, 200, 100);
   makeStuff(dim, buff, res);
-  gfx_flush();
-  for (int i = 0; i < 10; i++) {
-    for (int j = 0; j < 10; j++) {
-      myBuff[i][j] = '0';
-    }
-  }
-  morphTile(T, 2, 12);
+  morphTile(T, 2, 12); // extra side-tile
 }
 int getMouseTile(int c) 
 {
@@ -202,7 +190,7 @@ int getMouseTile(int c)
 
     if (x < res * 13  && y < res * 3 && x > res * 12  && y > res * 2) { r = 1; C = 12; R = 2;}
     return r;
-  }
+  } // else handle arrow keys?
   return 0;
 }
 void incrementTile(int i)
@@ -260,7 +248,7 @@ void makeStuff(int d, int b, int r)
       masterCount++;
       for (int k = 0; k < r; k++) {
         for (int l = 0; l < r; l++) {
-          myBuff[i][j] = kolor = getTilePixel(tile, k, l);
+          kolor = getTilePixel(tile, k, l);
           gfx_color(0, kolor * 200, kolor * 100);
           gfx_point(j * r + l + b, i * r + k + b);
         }
@@ -272,7 +260,10 @@ void makeStuff(int d, int b, int r)
   gfx_line(26, 25, 298 - 27, 25);
   gfx_line(298 - 27, 26, 298 - 27, 298 - 27);
   gfx_line(298 - 27, 298 - 27, 26, 298 - 27);
-  gfx_flush();
+
+  //side pane divider
+  gfx_color(200, 150, 100);
+  gfx_line(297, 0, 297, 297);
 }
 int fetchTile(int mapNum, int index) 
 {
