@@ -150,7 +150,7 @@ int gfx_event_waiting() {
           saved_xpos = event.xkey.x;
           saved_ypos = event.xkey.y; 
         } 
-        return 0;
+        return 1;
       }
     } else {
       return 0;
@@ -176,7 +176,12 @@ char gfx_wait() {
 			saved_xpos = event.xkey.x;
 			saved_ypos = event.xkey.y;
 			return event.xbutton.button;
-		}
+		} else {
+      /* insert mouse pointer detection GwizBilly 2020*/
+			saved_xpos = event.xkey.x;
+			saved_ypos = event.xkey.y;
+      return '0';
+    }
 	}
 }
 
