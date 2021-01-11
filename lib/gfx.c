@@ -134,8 +134,6 @@ void gfx_clear_color( int r, int g, int b ) {
 int gfx_event_waiting() {
   XEvent event;
 
-  gfx_flush();
-
   while (1) {
     if(XCheckMaskEvent(gfx_display,-1,&event)) {
       if(event.type==KeyPress) {
@@ -144,14 +142,14 @@ int gfx_event_waiting() {
       } else if (event.type==ButtonPress) {
         XPutBackEvent(gfx_display,&event);
         return 1;
-      } else {
+      } else if (event.type == MotionNotify) {
         /* insert mouse pointer detection GwizBilly 2020*/
-        if (event.type == MotionNotify) {
-          saved_xpos = event.xkey.x;
-          saved_ypos = event.xkey.y; 
-        } 
+        XPutBackEvent(gfx_display,&event);
+        saved_xpos = event.xkey.x;
+        saved_ypos = event.xkey.y; 
         return 1;
-      }
+      } 
+      return 0;
     } else {
       return 0;
     }
@@ -163,23 +161,15 @@ int gfx_event_waiting() {
 char gfx_wait() {
 	XEvent event;
 
-	gfx_flush();
-
 	while(1) {
 		XNextEvent(gfx_display,&event);
 
 		if(event.type==KeyPress) {
-			saved_xpos = event.xkey.x;
-			saved_ypos = event.xkey.y;
 			return XLookupKeysym(&event.xkey,0);
 		} else if(event.type==ButtonPress) {
-			saved_xpos = event.xkey.x;
-			saved_ypos = event.xkey.y;
 			return event.xbutton.button;
-		} else {
+		} else if (event.type==MotionNotify) {
       /* insert mouse pointer detection GwizBilly 2020*/
-			saved_xpos = event.xkey.x;
-			saved_ypos = event.xkey.y;
       return '0';
     }
 	}

@@ -11,6 +11,7 @@ int fetchTile(int mapNum, int index);
 int getMouseTile(int x, int y);
 void incrementTile();
 void cursorShift(int x, int y);
+void drawRedBox();
 #define ysize 297 
 #define xsize 297 + 27 + 27 + 27 
 #define dim 11 
@@ -66,21 +67,17 @@ int main()
   while (1) { // Wait for the user to press a character.
     if (c = gfx_event_waiting()) { 
       c = gfx_wait();
-      mx = gfx_xpos();
-      my = gfx_ypos();
       if (c == 1) {
         makeStuff(dim, buff, res);
         morphTile(T, R, C);
         morphTile(T, 2, 12); // selector off to the side
-        gfx_color(0,0,200);
-        gfx_line(C*res-1,R*res-1,C*res+res-1,R*res-1);
-        gfx_line(C*res-1,R*res-1,C*res-1,R*res+res-1);
-        gfx_line(C*res+res,R*res+res-1,C*res+res,R*res-1);
-        gfx_line(C*res+res,R*res+res,C*res-1,R*res+res);
+      } else if (c == '0') {
+        mx = gfx_xpos();
+        my = gfx_ypos();
+        cursorShift(mx, my);
       }
-      if (c == 'q') break; // Quit if it is the letter q.
-      if (c == '0') cursorShift(mx, my);
       gfx_flush();
+      if (c == 'q') break; // Quit if it is the letter q.
     } 
   }
   return 0;
@@ -146,7 +143,6 @@ void morphTile(char nextTile, int row, int col)
 }
 void makeStuff(int d, int b, int r) 
 {
-  gfx_clear();
   int masterCount = 0;
   int kolor, tile;
   for (int i = 0; i < d; i++) {
@@ -162,15 +158,7 @@ void makeStuff(int d, int b, int r)
       }
     }
   }  
-  gfx_color(200, 0, 0);
-  gfx_line(25, 25, 25, 298 - 27);
-  gfx_line(26, 25, 298 - 27, 25);
-  gfx_line(298 - 27, 26, 298 - 27, 298 - 27);
-  gfx_line(298 - 27, 298 - 27, 26, 298 - 27);
-
-  //side pane divider
-  gfx_color(200, 150, 100);
-  gfx_line(297, 0, 297, 297);
+  drawRedBox();
 }
 int myLastTile = 0;
 void cursorShift(int x, int y) 
@@ -186,4 +174,16 @@ void cursorShift(int x, int y)
     morphTile(T, 2, 12);
   } 
   myLastTile = myTileNow; 
+}
+void drawRedBox()
+{
+  gfx_color(200, 0, 0);
+  gfx_line(25, 25, 25, 298 - 27);
+  gfx_line(26, 25, 298 - 27, 25);
+  gfx_line(298 - 27, 26, 298 - 27, 298 - 27);
+  gfx_line(298 - 27, 298 - 27, 26, 298 - 27);
+
+  //side pane divider
+  gfx_color(200, 150, 100);
+  gfx_line(297, 0, 297, 297);
 }
