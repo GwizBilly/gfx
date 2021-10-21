@@ -21,14 +21,13 @@ void drawRedBox();
 int R, C, mx, my;
 char T = '2';
 
-int fetchTile(int mapNum, int index) 
-{
+int fetchTile(int mapNum, int index) {
   int x;
   x = gm[index][mapNum];
   return x; 
 }
-int getTilePixel(int tile, int k, int l) 
-{
+
+int getTilePixel(int tile, int k, int l) {
   if (tile == '1') {
     return 0;
   } else {
@@ -53,15 +52,15 @@ int getTilePixel(int tile, int k, int l)
     return x;
   }
 }
-void mySetup()
-{
+
+void mySetup() {
   gfx_open(xsize, ysize, "Example Graphics Program");
   gfx_color(0, 200, 100);
   makeStuff(dim, buff, res);
-  morphTile(T, 2, 12); // extra side-tile
+  morphTile(T, 2, 12); // extra side-tile.
 }
-int main()
-{
+
+int main() {
   mySetup();
   char c, t;
   while (1) { // Wait for the user to press a character.
@@ -70,7 +69,7 @@ int main()
       if (c == 1) {
         makeStuff(dim, buff, res);
         morphTile(T, R, C);
-        morphTile(T, 2, 12); // selector off to the side
+        morphTile(T, 2, 12); // selector off to the side.
       } else if (c == '0') {
         mx = gfx_xpos();
         my = gfx_ypos();
@@ -82,8 +81,8 @@ int main()
   }
   return 0;
 }
-int getMouseTile(int x, int y) 
-{
+
+int getMouseTile(int x, int y) {
   int r = 1;
   if (x < res * 13  && y < res * 3 && x > res * 12  && y > res * 2) {
     r = 1; C = 12; R = 2; return -1;
@@ -98,8 +97,8 @@ int getMouseTile(int x, int y)
     }
   }
 }
-void incrementTile()
-{
+
+void incrementTile() {
   if (T == '2') {
     T = '3';
   } else if (T == '3') {
@@ -130,8 +129,8 @@ void incrementTile()
     T = '2';
   }
 }
-void morphTile(char nextTile, int row, int col) 
-{
+
+void morphTile(char nextTile, int row, int col) {
   int kolor;
   for (int k = 0; k < res; k++) {
     for (int l = 0; l < res; l++) {
@@ -141,8 +140,8 @@ void morphTile(char nextTile, int row, int col)
     }
   }
 }
-void makeStuff(int d, int b, int r) 
-{
+
+void makeStuff(int d, int b, int r) {
   int masterCount = 0;
   int kolor, tile;
   for (int i = 0; i < d; i++) {
@@ -161,29 +160,28 @@ void makeStuff(int d, int b, int r)
   drawRedBox();
 }
 int myLastTile = 0;
-void cursorShift(int x, int y) 
-{
+void cursorShift(int x, int y) {
   int myTileNow = getMouseTile(x, y);
   if (myTileNow != myLastTile) {
     makeStuff(dim, buff, res);
-    gfx_color(0,0,200);
-    gfx_line(C*res-1,R*res-1,C*res+res-1,R*res-1);
-    gfx_line(C*res-1,R*res-1,C*res-1,R*res+res-1);
-    gfx_line(C*res+res,R*res+res-1,C*res+res,R*res-1);
-    gfx_line(C*res+res,R*res+res,C*res-1,R*res+res);
+    gfx_color(0, 0, 200);
+    gfx_line(C*res-1,   R*res-1,     C*res+res-1, R*res-1);
+    gfx_line(C*res-1,   R*res-1,     C*res-1,     R*res+res-1);
+    gfx_line(C*res+res, R*res+res-1, C*res+res,   R*res-1);
+    gfx_line(C*res+res, R*res+res,   C*res-1,     R*res+res);
     morphTile(T, 2, 12);
   } 
   myLastTile = myTileNow; 
 }
-void drawRedBox()
-{
-  gfx_color(200, 0, 0);
-  gfx_line(25, 25, 25, 298 - 27);
-  gfx_line(26, 25, 298 - 27, 25);
-  gfx_line(298 - 27, 26, 298 - 27, 298 - 27);
-  gfx_line(298 - 27, 298 - 27, 26, 298 - 27);
 
-  //side pane divider
+void drawRedBox() {
+  gfx_color(200, 0, 0);
+  gfx_line(25,       25,       25,       298 - 27);
+  gfx_line(26,       25,       298 - 27, 25);
+  gfx_line(298 - 27, 26,       298 - 27, 298 - 27);
+  gfx_line(298 - 27, 298 - 27, 26,       298 - 27);
+
+  // side pane divider.
   gfx_color(200, 150, 100);
   gfx_line(297, 0, 297, 297);
 }
