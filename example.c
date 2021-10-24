@@ -6,7 +6,7 @@ by Prof. Thain
 */
 
 #include <stdio.h>
-#include "gfx.h"
+#include "./lib/gfx.h"
 
 int main()
 {
