@@ -158,14 +158,12 @@ char gfx_wait() {
 
   while (1) {
     XNextEvent(gfx_display, &event);
-
     if (event.type == KeyPress) {
       return XLookupKeysym(&event.xkey, 0);
     } else if (event.type == ButtonPress) {
       return event.xbutton.button;
     } else if (event.type == MotionNotify) {
-      // insert mouse pointer detection GwizBilly 2020.
-      return '0';
+      return '0'; // insert mouse pointer detection GwizBilly 2020.
     }
   }
 }

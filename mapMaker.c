@@ -3,6 +3,12 @@
 #include "./lib/gfx.h"
 #include "./lib/tiles.c"
 #include "./lib/gm.c"
+#define ysize 297 
+#define xsize 297 + 27 + 27 + 27 
+#define dim 11 
+#define buff 0
+#define res 27 
+#define defaultNextTile 0
 void mySetup();
 void makeStuff(int d, int b, int r);
 void morphTile(char nextTile, int row, int col);
@@ -12,19 +18,73 @@ int getMouseTile(int x, int y);
 void incrementTile();
 void cursorShift(int x, int y);
 void drawRedBox();
-#define ysize 297 
-#define xsize 297 + 27 + 27 + 27 
-#define dim 11 
-#define buff 0
-#define res 27 
-#define defaultNextTile 0
 int R, C, mx, my;
 char T = '2';
+int myLastTile = 0;
+
+void mySetup() {
+	gfx_open(xsize, ysize, "Example Graphics Program");
+  gfx_color(0, 200, 100);
+  makeStuff(dim, buff, res);
+  morphTile(T, 2, 12); // extra side-tile.
+}
+
+int main() {
+  mySetup();
+  char c, t;
+  while (1) { // Wait for the user to press a character.
+    if (c = gfx_event_waiting()) { 
+      c = gfx_wait();
+      if (c == 1) {
+        makeStuff(dim, buff, res);
+        morphTile(T, R, C);
+        morphTile(T, 2, 12); // selector off to the side.
+      } else if (c == '0') {
+        mx = gfx_xpos();
+        my = gfx_ypos();
+        cursorShift(mx, my);
+      }
+      gfx_flush();
+      if (c == 'q') break; // Quit if it is the letter q.
+    } 
+  }
+  return 0;
+}
+
+void makeStuff(int d, int b, int r) {
+  int masterCount = 0;
+  int kolor, tile;
+  for (int i = 0; i < d; i++) {
+    for (int j = 0; j < d; j++) {
+      tile = fetchTile(0, masterCount);
+      masterCount++;
+      for (int k = 0; k < r; k++) {
+        for (int l = 0; l < r; l++) {
+          kolor = getTilePixel(tile, k, l);
+          gfx_color(0, kolor * 200, kolor * 100);
+          gfx_point(j * r + l + b, i * r + k + b);
+        }
+      }
+    }
+  }  
+  drawRedBox();
+}
 
 int fetchTile(int mapNum, int index) {
   int x;
   x = gm[index][mapNum];
   return x; 
+}
+
+void morphTile(char nextTile, int row, int col) {
+  int kolor;
+  for (int k = 0; k < res; k++) {
+    for (int l = 0; l < res; l++) {
+      kolor = getTilePixel(nextTile, k, l);
+      gfx_color(0, kolor * 200, kolor * 100);
+      gfx_point(col * res + l + buff, row * res + k + buff);
+    }
+  }
 }
 
 int getTilePixel(int tile, int k, int l) {
@@ -51,35 +111,6 @@ int getTilePixel(int tile, int k, int l) {
     }
     return x;
   }
-}
-
-void mySetup() {
-  gfx_open(xsize, ysize, "Example Graphics Program");
-  gfx_color(0, 200, 100);
-  makeStuff(dim, buff, res);
-  morphTile(T, 2, 12); // extra side-tile.
-}
-
-int main() {
-  mySetup();
-  char c, t;
-  while (1) { // Wait for the user to press a character.
-    if (c = gfx_event_waiting()) { 
-      c = gfx_wait();
-      if (c == 1) {
-        makeStuff(dim, buff, res);
-        morphTile(T, R, C);
-        morphTile(T, 2, 12); // selector off to the side.
-      } else if (c == '0') {
-        mx = gfx_xpos();
-        my = gfx_ypos();
-        cursorShift(mx, my);
-      }
-      gfx_flush();
-      if (c == 'q') break; // Quit if it is the letter q.
-    } 
-  }
-  return 0;
 }
 
 int getMouseTile(int x, int y) {
@@ -130,36 +161,6 @@ void incrementTile() {
   }
 }
 
-void morphTile(char nextTile, int row, int col) {
-  int kolor;
-  for (int k = 0; k < res; k++) {
-    for (int l = 0; l < res; l++) {
-      kolor = getTilePixel(nextTile, k, l);
-      gfx_color(0, kolor * 200, kolor * 100);
-      gfx_point(col * res + l + buff, row * res + k + buff);
-    }
-  }
-}
-
-void makeStuff(int d, int b, int r) {
-  int masterCount = 0;
-  int kolor, tile;
-  for (int i = 0; i < d; i++) {
-    for (int j = 0; j < d; j++) {
-      tile = fetchTile(1, masterCount);
-      masterCount++;
-      for (int k = 0; k < r; k++) {
-        for (int l = 0; l < r; l++) {
-          kolor = getTilePixel(tile, k, l);
-          gfx_color(0, kolor * 200, kolor * 100);
-          gfx_point(j * r + l + b, i * r + k + b);
-        }
-      }
-    }
-  }  
-  drawRedBox();
-}
-int myLastTile = 0;
 void cursorShift(int x, int y) {
   int myTileNow = getMouseTile(x, y);
   if (myTileNow != myLastTile) {
