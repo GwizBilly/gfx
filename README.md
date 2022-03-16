@@ -1,7 +1,7 @@
 # gfx
 Project for using a simple C graphics library on a Linux machine (Raspberry Pi or WSL/VcXsrv in my case).
 
-I mostly develop on Windows10 using the Windows Subystem for Linux. At the time of writing this, setting up on windows means you have to install an x11 server like "VcXsrv" and have it running in the background when you launch your graphical app.
+~~I mostly develop on Windows10 using the Windows Subystem for Linux.~~ At the time of writing this, setting up on windows means you have to install an x11 server like "VcXsrv" and have it running in the background when you launch your graphical app. But now I use Pop!_OS.
 
 To install x11:
 ```
